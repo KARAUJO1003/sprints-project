@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// model Project {
+//   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+//   name        String
+//   description String
+//   sprints     Sprint[]
+//   teams       Team[]
+// }
+
+// model Sprint {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   projectId String   @db.ObjectId
+//   project   Project  @relation(fields: [projectId], references: [id])
+//   startDate DateTime
+//   endDate   DateTime
+//   tasks     Task[]
+// }
+
+// model Task {
+//   id          String     @id @default(auto()) @map("_id") @db.ObjectId
+//   sprintId    String     @db.ObjectId
+//   sprint      Sprint     @relation(fields: [sprintId], references: [id])
+//   userId      String?    @db.ObjectId
+//   // user        User?      @relation(fields: [userId], references: [id])
+//   name        String
+//   description String
+//   status      TaskStatus
+// }
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  name  String?
+  email String?
+  // tasks Task[]
+  // teams Team[]
+}
+
+// model Team {
+//   id        String  @id @default(auto()) @map("_id") @db.ObjectId
+//   projectId String  @db.ObjectId
+//   project   Project @relation(fields: [projectId], references: [id])
+//   userId    String  @db.ObjectId
+//   // user      User    @relation(fields: [userId], references: [id])
+// }
+
+enum TaskStatus {
+  TO_DO
+  IN_PROGRESS
+  DONE
+}

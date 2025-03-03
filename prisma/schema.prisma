@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+}
+
+model Pessoa {
+  id          String       @id @default(uuid())
+  nome        String
+  email       String       @unique
+  telefone    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Colaborador Colaborador?
+}
+
+model Vaga {
+  id          String   @id @default(uuid())
+  titulo      String
+  descricao   String
+  statusId    String
+  categoriaId String
+  posicaoId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Status    Status    @relation(fields: [statusId], references: [id])
+  Categoria Categoria @relation(fields: [categoriaId], references: [id])
+  Posicao   Posicao   @relation(fields: [posicaoId], references: [id])
+
+  Colaboradores Colaborador[]
+  Phases        Phase[]
+}
+
+model Colaborador {
+  id       String @id @default(uuid())
+  pessoaId String @unique
+  vagaId   String
+
+  Pessoa Pessoa @relation(fields: [pessoaId], references: [id])
+  Vaga   Vaga   @relation(fields: [vagaId], references: [id])
+}
+
+model Posicao {
+  id        String   @id @default(uuid())
+  nome      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Vagas     Vaga[]
+}
+
+model Status {
+  id        String   @id @default(uuid())
+  nome      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Vagas     Vaga[]
+}
+
+model Categoria {
+  id        String   @id @default(uuid())
+  nome      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Vagas     Vaga[]
+}
+
+model Phase {
+  id        String   @id @default(uuid())
+  nome      String
+  vagaId    String
+  ordem     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Vaga Vaga @relation(fields: [vagaId], references: [id])
+}
