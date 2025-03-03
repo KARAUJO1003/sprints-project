@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   BookOpen,
   Bot,
+  ChartArea,
   Command,
   Frame,
   LifeBuoy,
@@ -12,12 +13,12 @@ import {
   Send,
   Settings2,
   SquareTerminal,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -26,96 +27,120 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "kaesyo_dev",
+    email: "kaesyo.dev@dev.com",
+    avatar: "https://github.com/KARAUJO1003.png",
   },
   navMain: [
     {
-      title: "Playground",
+      title: "Painel Administrativo",
+      url: "/",
+      icon: ChartArea,
+    },
+    {
+      title: "Gestão de Pessoas",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Colaboradores",
+          url: "/colaboradores",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Pessoas",
+          url: "/pessoas",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Gestão de Vagas",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "Organograma",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Recrutamento",
+          url: "/recrutamento",
+        },
+        {
+          title: "Solicitações",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Indicadores",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Cadastros",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Cargos",
+          url: "#",
+        },
+        {
+          title: "Departamentos",
+          url: "#",
+        },
+        {
+          title: "Unidades",
+          url: "#",
+        },
+        {
+          title: "Turnos",
+          url: "#",
+        },
+        {
+          title: "Jornadas",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Relatórios",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Gerador de Relatórios",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Relatórios Prontos",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Configurações",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "Gerais",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Times",
           url: "#",
         },
         {
-          title: "Billing",
+          title: "Permissões",
           url: "#",
         },
         {
-          title: "Limits",
+          title: "Integrações",
           url: "#",
         },
       ],
@@ -150,7 +175,7 @@ const data = {
       icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -161,13 +186,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton
+              size="lg"
+              asChild
+            >
               <a href="#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
+                  <span className="truncate font-semibold">
+                    POP Recruiter Inc
+                  </span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div>
               </a>
@@ -178,11 +208,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary
+          items={data.navSecondary}
+          className="mt-auto"
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
