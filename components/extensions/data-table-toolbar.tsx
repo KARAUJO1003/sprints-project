@@ -8,7 +8,10 @@ import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/extensions/data-table-view-options";
 
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { priorities, statuses } from "@/app/pessoas/components/data";
+import {
+  priorities,
+  statuses,
+} from "@/app/(dashboard)/pessoas/components/data";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
