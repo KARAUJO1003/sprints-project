@@ -64,7 +64,7 @@ const data = {
       items: [
         {
           title: "Organograma",
-          url: "#",
+          url: "/organograma",
         },
         {
           title: "Recrutamento",
@@ -180,7 +180,8 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className="top-[--header-height] !h-[calc(100svh-var(--header-height))]"
+      variant="inset"
+      // className="top-[--header-height] !h-[calc(100svh-var(--header-height))]"
       {...props}
     >
       <SidebarHeader>
@@ -196,7 +197,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    POP Recruiter Inc
+                    SK Recruiter Inc
                   </span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div>

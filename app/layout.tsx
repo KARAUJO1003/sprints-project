@@ -4,6 +4,7 @@ import "./globals.css";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { AppSidebar } from "@/components/app-sidebar";
+import Providers from "@/providers/query-client-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,19 +29,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark rellative`}
       >
-        <div className="[--header-height:calc(theme(spacing.14))]">
-          <SidebarProvider className="flex flex-col">
-            <SiteHeader />
-            <div className="flex flex-1">
-              <AppSidebar />
-              <SidebarInset>
-                <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
-              </SidebarInset>
-            </div>
-          </SidebarProvider>
-        </div>
+        <Providers>
+          <div
+          // className="[--header-height:calc(theme(spacing.14))] overflow-hidden"
+          >
+            <SidebarProvider className="flex flex-col">
+              <div className="flex flex-1">
+                <AppSidebar />
+                <SidebarInset>
+                  <SiteHeader />
+                  <div className="p-4 overflow-hidden">{children}</div>
+                </SidebarInset>
+              </div>
+            </SidebarProvider>
+          </div>
+        </Providers>
       </body>
     </html>
   );

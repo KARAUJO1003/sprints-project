@@ -13,12 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
-}
-
 model Pessoa {
   id          String       @id @default(uuid())
   nome        String
@@ -89,4 +83,145 @@ model Phase {
   updatedAt DateTime @updatedAt
 
   Vaga Vaga @relation(fields: [vagaId], references: [id])
+}
+
+enum UsuarioTipo {
+  ADMIN
+  GESTOR_GERAL
+  GESTOR_GERENCIA
+  COLABORADOR
+}
+
+model Gerencia {
+  id        String         @id @default(cuid())
+  nome      String
+  gestorId  String
+  gestor    Usuario        @relation("GerenciaGestor", fields: [gestorId], references: [id])
+  usuarios  Usuario[]      @relation("UsuariosDaGerencia")
+  projetos  Projeto[]
+  metas     MetaGerencia[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model Usuario {
+  id                       String                    @id @default(cuid())
+  nome                     String
+  email                    String                    @unique
+  senha                    String
+  cargo                    String
+  tipo                     UsuarioTipo
+  gerenciaId               String?
+  gerencia                 Gerencia?                 @relation("UsuariosDaGerencia", fields: [gerenciaId], references: [id])
+  tarefas                  Tarefa[]                  @relation("ResponsavelTarefa")
+  subtarefas               Subtarefa[]               @relation("ResponsavelSubtarefa")
+  gerencias                Gerencia[]                @relation("GerenciaGestor") // gestor de várias gerências
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  historicosAcompanhamento HistoricoAcompanhamento[] @relation("UsuarioHistorico")
+}
+
+model Sprint {
+  id         String         @id @default(cuid())
+  nome       String
+  tipo       SprintTipo
+  dataInicio DateTime
+  dataFim    DateTime
+  descricao  String?
+  projetos   Projeto[]
+  metas      MetaGerencia[]
+}
+
+enum SprintTipo {
+  TRIMESTRE
+  QUADRIMESTRE
+  SEMESTRE
+  ANUAL
+  PERSONALIZADO
+}
+
+model Projeto {
+  id             String                    @id @default(cuid())
+  titulo         String
+  descricao      String?
+  status         StatusProjeto
+  metaPercentual Float
+  gerenciaId     String
+  sprintId       String
+  gerencia       Gerencia                  @relation(fields: [gerenciaId], references: [id])
+  sprint         Sprint                    @relation(fields: [sprintId], references: [id])
+  tarefas        Tarefa[]
+  historicos     HistoricoAcompanhamento[]
+}
+
+enum StatusProjeto {
+  PLANEJADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+model Tarefa {
+  id            String                    @id @default(cuid())
+  titulo        String
+  descricao     String?
+  prioridade    String?
+  status        StatusTarefa
+  dataInicio    DateTime?
+  dataFim       DateTime?
+  projetoId     String
+  responsavelId String
+  projeto       Projeto                   @relation(fields: [projetoId], references: [id])
+  responsavel   Usuario                   @relation("ResponsavelTarefa", fields: [responsavelId], references: [id])
+  subtarefas    Subtarefa[]
+  historicos    HistoricoAcompanhamento[] @relation()
+}
+
+enum StatusTarefa {
+  PENDENTE
+  EM_PROGRESSO
+  CONCLUIDA
+}
+
+model Subtarefa {
+  id            String       @id @default(cuid())
+  titulo        String
+  descricao     String?
+  status        StatusTarefa
+  dataInicio    DateTime?
+  dataFim       DateTime?
+  tarefaId      String
+  responsavelId String
+  tarefa        Tarefa       @relation(fields: [tarefaId], references: [id])
+  responsavel   Usuario      @relation("ResponsavelSubtarefa", fields: [responsavelId], references: [id])
+}
+
+model MetaGerencia {
+  id              String   @id @default(cuid())
+  gerenciaId      String
+  sprintId        String
+  metaEsperada    Float
+  metaAlcancada   Float    @default(0)
+  percentualBonus Float
+  gerencia        Gerencia @relation(fields: [gerenciaId], references: [id])
+  sprint          Sprint   @relation(fields: [sprintId], references: [id])
+}
+
+model RegraBonificacao {
+  id               String @id @default(cuid())
+  descricao        String
+  regraJson        Json
+  valorMaximoBonus Float
+}
+
+model HistoricoAcompanhamento {
+  id        String   @id @default(cuid())
+  projetoId String?
+  tarefaId  String?
+  usuarioId String
+  descricao String
+  data      DateTime @default(now())
+  projeto   Projeto? @relation(fields: [projetoId], references: [id])
+  tarefa    Tarefa?  @relation(fields: [tarefaId], references: [id])
+  usuario   Usuario  @relation("UsuarioHistorico", fields: [usuarioId], references: [id])
 }
